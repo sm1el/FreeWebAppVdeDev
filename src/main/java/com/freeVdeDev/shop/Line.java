@@ -1,4 +1,4 @@
-package com.orange.shop;
+package com.freeVdeDev.shop;
 
 public class Line {
 
