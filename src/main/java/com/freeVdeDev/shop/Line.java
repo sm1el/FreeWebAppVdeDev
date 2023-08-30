@@ -1,5 +1,9 @@
 package com.freeVdeDev.shop;
 
+/**
+ * 
+ * @author NJE103
+ */
 public class Line {
 
 	private String field1;
