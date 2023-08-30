@@ -2,7 +2,7 @@ package com.freeVdeDev.shop;
 
 /**
  * 
- * @author NJE103
+ * @author Abdelhadi
  */
 public class Line {
 
