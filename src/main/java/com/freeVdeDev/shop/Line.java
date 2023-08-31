@@ -6,82 +6,82 @@ package com.freeVdeDev.shop;
  */
 public class Line {
 
-	private String field1;
-	private String field2;
-	private String field3;
-	private String field4;
-	private String field5;
-	private String field6;
+	private String longitude;
+	private String latitude;
+	private String shopDescription;
+	private String sunusng;
+	private String ipom;
+	private String weiwei;
 
 	public Line() {
 		super();
 	}
 
-	public Line(String field1, String field2, String field3, String field4, String field5, String field6) {
+	public Line(String longitude, String latitude, String shopDescription, String sunusng, String ipom, String weiwei) {
 		super();
-		this.field1 = field1;
-		this.field2 = field2;
-		this.field3 = field3;
-		this.field4 = field4;
-		this.field5 = field5;
-		this.field6 = field6;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.shopDescription = shopDescription;
+		this.sunusng = sunusng;
+		this.ipom = ipom;
+		this.weiwei = weiwei;
 	}
 
 	public Line(String... fields) {
-		this.field1 = fields[0];
-		this.field2 = fields[1];
-		this.field3 = fields[2];
-		this.field4 = fields[3];
-		this.field5 = fields[4];
-		this.field6 = fields[5];
+		this.longitude = fields[0];
+		this.latitude = fields[1];
+		this.shopDescription = fields[2];
+		this.sunusng = fields[3];
+		this.ipom = fields[4];
+		this.weiwei = fields[5];
 	}
 
-	public String getField1() {
-		return field1;
+	public String getlongitude() {
+		return longitude;
 	}
 
-	public void setField1(String field1) {
-		this.field1 = field1;
+	public void setlongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
-	public String getField2() {
-		return field2;
+	public String getlatitude() {
+		return latitude;
 	}
 
-	public void setField2(String field2) {
-		this.field2 = field2;
+	public void setlatitude(String latitude) {
+		this.latitude = latitude;
 	}
 
-	public String getField3() {
-		return field3;
+	public String getshopDescription() {
+		return shopDescription;
 	}
 
-	public void setField3(String field3) {
-		this.field3 = field3;
+	public void setshopDescription(String shopDescription) {
+		this.shopDescription = shopDescription;
 	}
 
-	public String getField4() {
-		return field4;
+	public String getsunusng() {
+		return sunusng;
 	}
 
-	public void setField4(String field4) {
-		this.field4 = field4;
+	public void setsunusng(String sunusng) {
+		this.sunusng = sunusng;
 	}
 
-	public String getField5() {
-		return field5;
+	public String getipom() {
+		return ipom;
 	}
 
-	public void setField5(String field5) {
-		this.field5 = field5;
+	public void setipom(String ipom) {
+		this.ipom = ipom;
 	}
 
-	public String getField6() {
-		return field6;
+	public String getweiwei() {
+		return weiwei;
 	}
 
-	public void setField6(String field6) {
-		this.field6 = field6;
+	public void setweiwei(String weiwei) {
+		this.weiwei = weiwei;
 	}
 
 }
