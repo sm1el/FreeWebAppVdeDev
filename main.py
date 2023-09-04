@@ -1,12 +1,15 @@
 import csv
+"""Importation du fichier csv"""
 import math
 import json
 from urllib.request import urlopen
+"""Bibliothèque pour me permet de récupérer des données à partir d'une URLS"""
 import folium
+"""Bibliothèque qui me permet de représenter une postion sur une carte"""
 import webbrowser
+from geopy.geocoders import Nominatim
 
-
-
+""" Fonction qui permet de trouver la position GPS"""
 def Maposition():
     local=[]
     urlopen("http://ipinfo.io/json")
@@ -15,19 +18,18 @@ def Maposition():
     local.append(data['loc'].split(',')[1])
     return local
 
-localiser=Maposition()
-longi=float(localiser[0])
-lat=float(localiser[1])
-#print(longi)
-#print(lat)
-tel=input("Le téléphone que vous voulez achetez: ")
-#tel="sunusng"
+localiser=Maposition() #chargement des données dans une structure de données, dictionnaire
+lat=float(localiser[0]) #Récupération de la latitude
+longi=float(localiser[1]) #Récupération de la longitude
+
+tel=input("Le téléphone que vous voulez achetez: ") #Demander la marque de téléphone que le client veut
+
+
+"""Création d'un distionnaire pour arranger les données CSV"""
 a={"longitude":[],"latitude":[],"boutique":[], "sunusng":[], "ipom":[], "weiwei":[]}
 with open('free_shop.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        #print(row)
-        #print(row['longitude'], row['latitude'])
         s=row["longitude;latitude;shopDescription;sunusng;ipom;weiwei"]
         s2=s.split(";")
         s1=row["longitude;latitude;shopDescription;sunusng;ipom;weiwei"].split(";")
@@ -62,7 +64,7 @@ with open('free_shop.csv', newline='') as csvfile:
         a["latitude"].append(z[0:y])
         w=z[y+1:]
         h=w.find(";")
-        #print(w[0:h])
+        #print(w[0:h])       #Cette partie, C'était une méthode, des manipulation pour arranger les données
         #print(w)
         a["boutique"].append(w[0:h])
         g=w[h+1:]
@@ -74,6 +76,12 @@ p=len(a["longitude"])
 tel="ipom"
 lat=48.90747
 longi=2.34104
+
+
+
+
+"""Cette partie c'est pour trouver la boutique la plus proche et récupérer l'adresse,
+Y compris de vérifier s'il y a un stock disponible pour la marque"""
 d1=(float(a["longitude"][1])-longi)*(float(a["longitude"][1])-longi)+ (float(a["latitude"][1])-lat)*(float(a["latitude"][1])-lat)
 for i in range(p):
     d=(float(a["longitude"][i])-longi)*(float(a["longitude"][i])-longi)+(float(a["latitude"][i])-lat)*(float(a["latitude"][i])-lat)
@@ -96,38 +104,43 @@ for i in range(p):
 
 
 
-    #print(a["longitude"][i], " ", a["latitude"][i], " ", a["boutique"][i])
+"""Cette partie vérifie si la maque est disponible"""
 if tel=="ipom":
     print("La boutique la plus proche est", a["boutique"][imin])
     print("Il reste ",a["ipom"][imin], " disponibles pour la marque ",tel)
+    poss=1
 else:
     if tel=="sunusng":
         print("La boutique la plus proche est", a["boutique"][imin])
         print("Il reste ", a["sunusng"][imin], " disponibles pour la marque ", tel)
-#print("Telephone de marque", tel, "est disponible, et il en reste", a["ipom"][i], " disponible")
+        poss = 1
     else:
         if tel=="weiwei":
             print("La boutique la plus proche est", a["boutique"][imin])
             print("Il reste ", a["weiwei"][imin], " disponibles pour la marque ", tel)
+            poss = 1
         else:
             print("marque telephone non disponible")
+            poss = 0
+
+
+"""Si le téléphone existe alors je représente la boutique la plus proche et la position du client"""
+if poss==1:
+    maCarteBoutique = folium.Map(location=[lat, longi], tiles='OpenStreetMap', zoom_start=12.5)
+    coords = [float(a["longitude"][imin]), float(a["latitude"][imin])]
+    folium.Marker(location=[lat, longi], popup = "Votre Adresse").add_to(maCarteBoutique)
+    folium.Marker(location=[a["latitude"][imin], a["longitude"][imin]], popup = a["boutique"][imin]).add_to(maCarteBoutique)
+    trail_coordinates = [
+        (lat, longi),
+        (a["latitude"][imin], a["longitude"][imin]),
+    ]
+    folium.PolyLine(trail_coordinates, tooltip="Coast").add_to(maCarteBoutique)
+    maCarteBoutique.save('maCarteBoutique.html')
+    webbrowser.open('maCarteBoutique.html')
 
 
 
-
-maCarteBoutique = folium.Map(location=[lat, longi], tiles='OpenStreetMap', zoom_start=12.5)
-coords = [float(a["longitude"][imin]), float(a["latitude"][imin])]
-folium.Marker(location=[lat, longi], popup = "Votre Adresse").add_to(maCarteBoutique)
-folium.Marker(location=[a["latitude"][imin], a["longitude"][imin]], popup = a["boutique"][imin]).add_to(maCarteBoutique)
-trail_coordinates = [
-    (lat, longi),
-    (a["latitude"][imin], a["longitude"][imin]),
-  ]
-folium.PolyLine(trail_coordinates, tooltip="Coast").add_to(maCarteBoutique)
-maCarteBoutique.save('maCarteBoutique.html')
-webbrowser.open('maCarteBoutique.html')
-
-
+"""Représentation de toutes les boutiques de France"""
 LesBoutiques = folium.Map(location=[lat, longi], tiles='OpenStreetMap', zoom_start=12.5)
 p=len(a["boutique"])
 for i in range(p):
@@ -136,32 +149,11 @@ for i in range(p):
 LesBoutiques.save('LesBoutiques.html')
 #webbrowser.open('LeBoutique.html')
 
-"""
-carte= folium.Map(location=[a["longitude"][imin], a["latitude"][imin]],zoom_start=14)
-
-folium.Marker([a["longitude"][imin], a["latitude"][imin]],popup="Boutique plus proche",icon=folium.Icon(color='green')).add_to(carte)
-folium.Marker([longi, lat],popup="Ta position",icon=folium.Icon(color='green')).add_to(carte)
-trail_coordinates = [
-    (longi, lat),
-    (a["longitude"][imin], a["latitude"][imin]),
-  ]
-folium.PolyLine(trail_coordinates, tooltip="Coast").add_to(carte)
-carte.save('Carte2.html')
-webbrowser.open('Carte2.html')
-"""
 
 
 
-""" 
-map = folium.Map(location=[lat, longi], tiles='OpenStreetMap', zoom_start=10)
-coords = [float(a["longitude"][imin]), float(a["latitude"][imin])]
-folium.Marker(location=[lat, longi], popup = "Votre Adresse").add_to(map)
-folium.Marker(location=[a["latitude"][imin], a["longitude"][imin]], popup = a["boutique"][imin]).add_to(map)
-trail_coordinates = [
-    (lat, longi),
-    (a["latitude"][imin], a["longitude"][imin]),
-  ]
-folium.PolyLine(trail_coordinates, tooltip="Coast").add_to(map)
-map.save('map.html')
-"""
+
+
+
+
 
