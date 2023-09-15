@@ -1,1 +1,6 @@
+com\freeVdeDev\shop\FreeShop.class
+com\freeVdeDev\shop\csvFileShopManipulation.class
+com\freeVdeDev\shop\FreeShopFinder.class
+com\freeVdeDev\shop\FreeShopFinderImpl.class
 com\freeVdeDev\shop\Line.class
+com\freeVdeDev\shop\FreeShopApplication.class
